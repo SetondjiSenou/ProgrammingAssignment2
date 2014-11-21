@@ -1,10 +1,15 @@
-## Put comments here that give an overall description of what your
-## functions do
+## Sets a special matrix to atomic variable x and creates a few more functions (see list)
 
-## Write a short comment describing this function
-
-makeCacheMatrix <- function(x = matrix()) {
-
+makeCacheMatrix <- function(x = matrix()) {# v <- makeCacheMatrix assign a matrix with inverse cache support to v
+        inv <- NULL
+        set <- function(y){
+                x <<- y # set x to Matrix chosen above
+                inv <<- NULL
+        }
+        get <- function() x # Retrieves matrix x; v$get() produces the matrix 
+        setinv <- function(solve) inv <<- solve # Assigns inv to what you say
+        getinv <- function() inv # Retrieves the inv matrix
+        list(set = set, get = get, setinv = setinv, getinv = getinv)
 }
 
 
