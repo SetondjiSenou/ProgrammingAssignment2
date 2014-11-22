@@ -1,28 +1,25 @@
-## Sets a special matrix to atomic variable x and creates a few more functions (see list)
-## This takes advantage of the lexical scoping rules R follows
-
 makeCacheMatrix <- function(x = matrix()) {# v <- makeCacheMatrix assign a matrix with inverse cache support to v
-        inv <- NULL
-        set <- function(y){
-                x <<- y # set x to Matrix chosen above
-                inv <<- NULL
+        inverse <- NULL
+        set <- function(y) {
+                x <<- y # set x to Matrix chosen above 
+                inverse <<- NULL # there is a place holder matrix yet
         }
-        get <- function() x # Retrieves matrix via v$get()
-        setinv <- function(solve) inv <<- solve # Assigns inv to what you solved
-        getinv <- function() inv # Retrieves the inv matrix
-        list(set = set, get = get, setinv = setinv, getinv = getinv)
+        get <- function() x # v$get() produces the matrix 
+        setinverse <- function(solve) inverse  <<- solve 
+        getinverse <- function() inverse # v$getinverse() retrieves the inverse of matrix
+        list(set = set, get = get,
+             setinverse = setinverse,
+             getinverse = getinverse)
 }
 
-## Caches, computes and returns the inverse (inv) of matrix from makeCacheMatrix
-
-cacheSolve <- function(x, ...) {
-        inv <- x$getinv() # Assigns inv to be the inverse of matrix
-        if(!is.null(inv)){ # if the inverse has already been calculated just return it without calculating again
+cacheSolve <- function(x, ...) {# cacheSolve(v) computes inverse of v
+        inverse <- x$getinverse() # assigns the inverse of x to inverse
+        if(!is.null(inverse)) { 
                 message("getting cached data")
-                return(inv)
+                return(inverse)
         }
-        data <- x$get() # Sets data variable to matrix x
-        inv <- solve(data) # Solves for the inverse and stores it in varaible inv
-        x$setinv(inv) # Assigns to inv the inverse matrix
-        inv # Returns the inverse matrix
+        data <- x$get()
+        inverse <- solve(data, ...) # Solves for the inverse(x) and stores it in varaible inverse
+        x$setinverse(inverse) 
+        inverse
 }
